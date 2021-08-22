@@ -1,0 +1,82 @@
+Notes:  Predicing Year of Marriage - EC2 deployment 
+Create ec2 server, set appropriate security groups conf and save private key (pem)
+Using puttygen to convert private pem key to ppk (for MAC this is not necessary)
+
+Login into ec2 server
+
+Commands:
+python3 -V
+
+curl -O https://bootstrap.pypa.io/get-pip.py
+sudo python3 get-pip.py
+
+sudo apt-get update
+
+sudo pip install flask, flask_cors, sklearn, apache2 , libapache2-mod-wsgi-py3
+
+Configure  /etc/apache2/sites-enabled/000-default.conf
+
+------- Apache Host file configuration
+------- file: /etc/apache2/sites-enabled/000-default.conf add this below content 
+DocumentRoot /home/ubuntu/mlapp
+WSGIDaemonProcess flaskapp threads=5 python-home=/usr/local/lib/python3.5/site-packages/ user=ubuntu
+        WSGIScriptAlias / /home/ubuntu/mlapp/flaskapp.wsgi
+<Directory /home/ubuntu/mlapp>
+            WSGIProcessGroup flaskapp
+            WSGIApplicationGroup %{GLOBAL}
+            Require all granted
+        </Directory>
+———————
+
+Create directory  /home/ubuntu/mlapp
+Create file flaskapp.wsgi  at mlapp directory with content below
+
+----------------- file : Flaskapp.wsgi
+import sys
+import site
+site.addsitedir(‘/home/ubuntu/.local/lib/python3.5/site-packages’)
+sys.path.insert(0, ‘/home/ubuntu/mlapp’)
+from app import app as application
+------------
+
+copy app.py and predict_model.ml files to EC2  /home/ubuntu/mlapp
+(recommended winscp app in windows, scp command line in Mac)
+
+sudo apachectl restart
+
+
+
+
+On succesful deployment, below url should work and return predicted of temperature.
+http://<your API public ip>/predict?Airtight=1263.19&Relative_Humidity=84.60&Vapor_pressure_deficit=0.85&Specific_humidity=2.95&Water_vapor_concentration=4.73&Vapor_pressure=4.67 &Temperature_dew_point=-3.61&Saturation_vapor_pressure=5.53&Temperature_in_Kelvin=272.79
+
+
+
+
+http://127.0.0.1:5000/predict?path_cv='/home/abdoulaye/Desktop/App_recommandation/Tested'&path_offre='/home/abdoulaye/Desktop/App_recommandation/Offre_emploi.docx'
+
+On succesful deployment, below url should work and return predicted of temperature.
+http://<your API public ip>/predict?Airtight=1189.93&Relative_Humidity=71.60&Vapor_pressure_deficit=4.50&Specific_humidity=7.20&Water_vapor_concentration=11.53&Vapor_pressure=11.35	 &Temperature_dew_point=8.82&Saturation_vapor_pressure=15.85&Temperature_in_Kelvin=288.28	
+
+On succesful deployment, below url should work and return predicted of temperature.
+http://<your API public ip>/predict?Airtight=1260.40&Relative_Humidity=97.40&Vapor_pressure_deficit=0.20&Specific_humidity=4.66&Water_vapor_concentration=7.47&Vapor_pressure=7.49	 &Temperature_dew_point=2.83&Saturation_vapor_pressure=7.69&Temperature_in_Kelvin=276.14		
+
+
+
+
+
+
+
+
+http://<your API public ip>/predict?rho (g/m**3)=1272.61&rh (%)=69.65&VPdef (mbar)=1.08&sh (g/kg)=1.58&H2OC (mmol/mol)=2.54 &VPact (mbar)=2.47&Tdew (degC)=-11.79&VPmax (mbar)=3.54&Tpot (K)=268.07
+
+
+		
+On succesful deployment, below url should work and return predicted age of marriage.
+http://<your API public ip>/predict?rho (g/m**3)=1272.61&rh (%)=69.65&VPdef (mbar)=1.08&sh (g/kg)=1.58&VPact (mbar)=2.54&Tdew (degC)=2.47 &=-11.79&Saturation vapor pressure=3.54&Temperature in Kelvin=268.07
+		
+		
+		
+		
+		
+		
