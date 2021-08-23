@@ -30,12 +30,12 @@ cors = CORS(app, resources  = {
 #     return render_template('/home/abdoulaye/Desktop/ML_APP/index.html')
 @app.route('/')
 def home():
-    return 'API start ....'
-@app.route('/predict',methods=['GET'])
+    return " API On...."
+@app.route('/Recherche',methods=['GET','POST'])
 def RecommandationCV():
     # data =  json.loads(dataCV)
     path_cv = request.args["path_cv"]
-    print(path_cv)
+    #print(path_cv)
     path_offre = request.args["path_offre"]
     # path_cv = data['path_cv']
     # path_offre = data['path_offre']
@@ -43,10 +43,16 @@ def RecommandationCV():
     deb = ["experience", "works", "experinces", "expérience", "EXPERIENCE", "EXPÉRIENCE", 'professionnelles']
     fin = ["education", "formation", "LEADERSHIP", "leadership", 'RÉALISATIONS', 'certifications', 'langues']
     cv_recommandation = matchs.Recommandation_CV(path_cv, path_offre, deb, fin)
-    return render_template('table.html')
+    cv_recommandation = dict(cv_recommandation)
+    cv_recommandation = pd.DataFrame(cv_recommandation)
+    #print(cv_recommandation)
+    return  render_template('tested.html', column_names=cv_recommandation.columns.values, row_data=list(cv_recommandation.values.tolist()), zip=zip)
+    #, prediction_text='Le modele predit  :{}'.format(cv_recommandation.to_html())
+   # cv_recommandation =cv_recommandation.to_ # use pandas method to auto generate html
+
+    #return cv_recommandation.to
     
-    
-    # #return render_template('/home/abdoulaye/Desktop/ML_APP/index.html', prediction_text='Le modele predit  :{}'.format(output))
+    #return render_template('/home/abdoulaye/Desktop/ML_APP/index.html', prediction_text='Le modele predit  :{}'.format(output))
 
 
 
