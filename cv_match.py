@@ -344,7 +344,7 @@ def Recommandation_CV(folder,path_offre, deb, fin):
   df = pd.DataFrame(L)
   df.columns =['Nom', "Annee d'éxperience", "Niveau d'etude",'Score(en %)', 'Telephone', 'Email']
 
-  df  = df.sort_values(by=["Score(en %)"], ascending = False)
+  #df  = df.sort_values(by=["Score(en %)"], ascending = False)
   return df.to_dict()
 
 def transform(text):
@@ -385,9 +385,9 @@ def data_table(folder_path,folder, deb, fin):
   #print(text_cut)
   experience = year_experience(text_cut)
   #print(experience)
-  L = [Nom_cv, experience, phone, email]
+  L = [Nom, experience, phone, email]
   df = pd.DataFrame([L])
-  df.columns =['Nom_cv','Years of Experience', 'Phone', 'Email']
+  #df  = df.sort_values(by=["Score(en %)"], ascending = False)
   return df.to_dict()
 
 # def Score(cvs_path, jobs_path):

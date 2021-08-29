@@ -31,7 +31,7 @@ cors = CORS(app, resources  = {
 @app.route('/')
 def home():
     return " API On...."
-@app.route('/Recherche',methods=['GET','POST'])
+@app.route('/predict',methods=['GET','POST'])
 def RecommandationCV():
     # data =  json.loads(dataCV)
     path_cv = request.args["path_cv"]
@@ -45,7 +45,8 @@ def RecommandationCV():
     cv_recommandation = matchs.Recommandation_CV(path_cv, path_offre, deb, fin)
     cv_recommandation = dict(cv_recommandation)
     cv_recommandation = pd.DataFrame(cv_recommandation)
-    #print(cv_recommandation)
+    print(cv_recommandation['Nom'])
+    cv_recommandation  = cv_recommandation.sort_values(by=["Score(en %)"], ascending = False)
     return  render_template('tested.html', column_names=cv_recommandation.columns.values, row_data=list(cv_recommandation.values.tolist()), zip=zip)
     #, prediction_text='Le modele predit  :{}'.format(cv_recommandation.to_html())
    # cv_recommandation =cv_recommandation.to_ # use pandas method to auto generate html
